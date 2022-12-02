@@ -4,10 +4,9 @@ import sys
 
 def parse(puzzle_input):
     """Parse input."""
-    output = {}
-    for play in puzzle_input.split('\n'):
-        vals = play.split(' ')
-        output[vals[0]] = vals[1]
+    output = []
+    for row in puzzle_input.split('\n'):
+        output.append(row.split())
     return output
 
 def part1(data):
@@ -15,11 +14,24 @@ def part1(data):
     win_table = [[3, 6, 0],
                  [0, 3, 6],
                  [6, 0, 3]]
-    values = {"X": 1, "Y": 2, "Z": 3}
-    return 15
+    indices = {"X": 0, "Y": 1, "Z": 2, "A": 0, "B": 1, "C": 2}
+
+    score = 0
+    for row in data:
+        round_score = win_table[indices[row[0]]][indices[row[1]]] + indices[row[1]] + 1
+        score += round_score
+
+    return score
 
 def part2(data):
     """Solve part 2."""
+
+    parse_table = [[3, 6, 0],
+                 [0, 3, 6],
+                 [6, 0, 3]]
+    indices = {"X": 0, "Y": 1, "Z": 2, "A": 0, "B": 1, "C": 2}
+
+    return 12
 
 def solve(puzzle_input):
     """Solve the puzzle for the given input."""
