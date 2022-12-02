@@ -2,6 +2,9 @@
 import pathlib
 import sys
 
+win_table = [[3, 6, 0],
+             [0, 3, 6],
+             [6, 0, 3]]
 def parse(puzzle_input):
     """Parse input."""
     output = []
@@ -11,9 +14,7 @@ def parse(puzzle_input):
 
 def part1(data):
     """Solve part 1."""
-    win_table = [[3, 6, 0],
-                 [0, 3, 6],
-                 [6, 0, 3]]
+
     indices = {"X": 0, "Y": 1, "Z": 2, "A": 0, "B": 1, "C": 2}
 
     score = 0
@@ -26,9 +27,6 @@ def part1(data):
 def part2(data):
     """Solve part 2."""
 
-    win_table = [[3, 6, 0],
-                 [0, 3, 6],
-                 [6, 0, 3]]
     indices = {"X": 0, "Y": 3, "Z": 6, "A": 0, "B": 1, "C": 2}
 
     score = 0
