@@ -26,12 +26,17 @@ def part1(data):
 def part2(data):
     """Solve part 2."""
 
-    parse_table = [[3, 6, 0],
+    win_table = [[3, 6, 0],
                  [0, 3, 6],
                  [6, 0, 3]]
-    indices = {"X": 0, "Y": 1, "Z": 2, "A": 0, "B": 1, "C": 2}
+    indices = {"X": 0, "Y": 3, "Z": 6, "A": 0, "B": 1, "C": 2}
 
-    return 12
+    score = 0
+
+    for row in data:
+        desired_index = win_table[indices[row[0]]].index(indices[row[1]])
+        score = score + desired_index + 1 + indices[row[1]]
+    return score
 
 def solve(puzzle_input):
     """Solve the puzzle for the given input."""
