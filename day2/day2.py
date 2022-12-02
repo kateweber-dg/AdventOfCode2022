@@ -5,6 +5,7 @@ import sys
 win_table = [[3, 6, 0],
              [0, 3, 6],
              [6, 0, 3]]
+
 def parse(puzzle_input):
     """Parse input."""
     output = []
