@@ -2,14 +2,22 @@
 import pathlib
 import sys
 
+
 def parse(puzzle_input):
     """Parse input."""
+    output = []
+    for row in puzzle_input.split('\n'):
+        output.append(row.split())
+    return output
 
 def part1(data):
     """Solve part 1."""
+    pass
 
 def part2(data):
     """Solve part 2."""
+
+    pass
 
 def solve(puzzle_input):
     """Solve the puzzle for the given input."""
