@@ -4,10 +4,6 @@ import sys
 import string
 
 
-def calculate_priority(item_list):
-    priorities = [string.ascii_letters.index(x) + 1 for x in item_list]
-    return priorities
-
 def parse(puzzle_input):
     """Parse input."""
     lines = [x.split(',') for x in puzzle_input.split('\n')]
