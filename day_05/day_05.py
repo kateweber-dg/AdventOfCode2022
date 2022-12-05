@@ -34,8 +34,7 @@ def parse(puzzle_input):
     inst_list = [re.findall('\d+', x) for x in instructions]
     inst_list = [[int(x) for x in y] for y in inst_list]
 
-    return {'stack': stack_dict,
-            'instructions': inst_list}
+    return {'stack': stack_dict, 'instructions': inst_list}
 
 
 def part1(parsed_input):
