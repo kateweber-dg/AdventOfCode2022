@@ -51,9 +51,7 @@ def parse(puzzle_input):
 
     root = Directory('root')
     current_dir = root
-    line_number = 0
     for line in lines:
-        line_number += 1
         if line[0:4] == '$ cd':
             cd_dir_str = line.split(' ')[-1]
             if cd_dir_str == '/':
