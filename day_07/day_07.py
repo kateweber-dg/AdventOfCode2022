@@ -16,7 +16,7 @@ class Directory(object):
         self.name = name
         self.contents = {}
         self.parent_dir = None
-        self.size_array = []
+        self.size_array = None
 
     def add_item(self, item):
         if isinstance(item, Directory):
@@ -32,7 +32,9 @@ class Directory(object):
                 size += item.get_size()
         return size
 
-    def walk_sizes(self, size_array=[]):
+    def walk_sizes(self, size_array=None):
+        if size_array is None:
+            size_array = []
         if not size_array:
             size_array = [self.get_size()]
         for key, item in self.contents.items():
