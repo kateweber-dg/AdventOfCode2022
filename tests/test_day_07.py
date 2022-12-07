@@ -1,5 +1,7 @@
 import pathlib
+
 import pytest
+
 import day_07.day_07 as aoc
 
 PUZZLE_DIR = pathlib.Path(__file__).parent.parent

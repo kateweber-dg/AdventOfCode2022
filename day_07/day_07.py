@@ -1,5 +1,4 @@
 import pathlib
-import re
 import sys
 
 
@@ -7,8 +6,6 @@ class File(object):
     def __init__(self, name, file_size):
         self.name = name
         self.file_size = file_size
-        self.size = 0
-
 
     def __repr__(self):
         return f'{self.name} (file, size={self.file_size})'
@@ -35,7 +32,7 @@ class Directory(object):
                 size += item.get_size()
         return size
 
-    def walk_sizes(self, size_array = []):
+    def walk_sizes(self, size_array=[]):
         if size_array == []:
             size_array = [self.get_size()]
         for key, item in self.contents.items():
