@@ -33,7 +33,7 @@ class Directory(object):
         return size
 
     def walk_sizes(self, size_array=[]):
-        if size_array == []:
+        if not size_array:
             size_array = [self.get_size()]
         for key, item in self.contents.items():
             if isinstance(item, Directory):
@@ -86,12 +86,12 @@ def part1(parsed_input):
 
 def part2(parsed_input):
     """Solve part 2."""
+    root = parsed_input
+
     total_disk_space = 70000000
     needed_space = 30000000
-    root = parsed_input
     size_array = root.walk_sizes()
-
-    unused_space = 70000000 - size_array[0]
+    unused_space = total_disk_space - root.get_size()
     required_to_delete = needed_space - unused_space
 
     return min([x for x in size_array if x > required_to_delete])
@@ -109,6 +109,6 @@ def solve(puzzle_input):
 if __name__ == "__main__":
     for path in sys.argv[1:]:
         print(f"{path}:")
-        puzzle_input = pathlib.Path(path).read_text().strip()
+        puzzle_input: str = pathlib.Path(path).read_text().strip()
         solutions = solve(puzzle_input)
         print("\n".join(str(solution) for solution in solutions))
