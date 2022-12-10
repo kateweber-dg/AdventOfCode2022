@@ -1,6 +1,7 @@
 import pathlib
 import sys
-import numpy as np
+
+import matplotlib.pyplot as plt
 
 
 def parse(puzzle_input):
@@ -10,10 +11,11 @@ def parse(puzzle_input):
     return output
 
 
-class Point(object):
-    def __init__(self):
-        self.x = 0
-        self.y = 0
+class Knot(object):
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+        self.visited_locations = {(self.x, self.y)}
 
     def move(self, direction):
         match direction:
@@ -29,55 +31,44 @@ class Point(object):
                 print('invalid direction')
                 return
 
-    def __repr__(self):
-        return f'({self.x}, {self.y})'
-
-
-class Head(Point):
-    def __init__(self):
-        super().__init__()
-
-        print(self.__repr__())
-
-
-class Tail(Point):
-    def __init__(self):
-        super().__init__()
-        self.visited_locations = {(self.x, self.y)}
-
     def follow(self, head_point):
         # there has to be a generalisable rule here :|
-        if head_point.x - self.x + head_point.y - self.y == 3:
+        dx = head_point.x - self.x
+        dy = head_point.y - self.y
+        if dx + dy >= 3:
             self.move('R')
             self.move('U')
-        elif (head_point.x - self.x == 2 and head_point.y - self.y == -1) or \
-                (head_point.x - self.x == 1 and head_point.y - self.y == -2):
+        elif (dx == 2 and dy == -1) or \
+                (dx == 1 and dy == -2):
             self.move('R')
             self.move('D')
-        elif (head_point.x - self.x == -2 and head_point.y - self.y == 1) or \
-                (head_point.x - self.x == -1 and head_point.y - self.y == 2):
+        elif (dx == -2 and dy == 1) or \
+                (dx == -1 and dy == 2):
             self.move('L')
             self.move('U')
-        elif head_point.x - self.x + head_point.y - self.y == -3:
+        elif dx + dy <= -3:
             self.move('L')
             self.move('D')
 
-        elif head_point.x - self.x > 1:
+        elif dx > 1:
             self.move('R')
-        elif head_point.x - self.x < -1:
+        elif dx < -1:
             self.move('L')
-        elif head_point.y - self.y > 1:
+        elif dy > 1:
             self.move('U')
-        elif head_point.y - self.y < -1:
+        elif dy < -1:
             self.move('D')
 
         self.visited_locations.add((self.x, self.y))
 
+    def __repr__(self):
+        return f'({self.x}, {self.y})'
+
 
 def part1(parsed_input):
     """Solve part 1."""
-    head = Head()
-    tail = Tail()
+    head = Knot()
+    tail = Knot()
 
     for instruction in parsed_input:
         for repeat in range(instruction[1]):
@@ -86,9 +77,40 @@ def part1(parsed_input):
 
     return len(tail.visited_locations)
 
+
+def plot_grid(rope):
+    rope_coords = [[knot.x, knot.y] for knot in rope]
+    x_coords = [x[0] for x in rope_coords]
+    y_coords = [x[1] for x in rope_coords]
+    plt.scatter(x_coords, y_coords)
+    for i in range(len(x_coords)):
+        plt.annotate(str(i), (x_coords[i], y_coords[i] + 0.2))
+    plt.axis('equal')
+    plt.show()
+
+def plot_travel(rope):
+    travel_coords = rope[-1].visited_locations
+    x_coords = [x[0] for x in travel_coords]
+    y_coords = [x[1] for x in travel_coords]
+    plt.scatter(x_coords, y_coords)
+    plt.axis('equal')
+    plt.show()
+
+
 def part2(parsed_input):
     """Solve part 2."""
-    pass
+    n_knots = 10
+
+    rope = [Knot() for x in range(n_knots)]
+
+    for instruction in parsed_input:
+        for repeat in range(instruction[1]):
+            rope[0].move(instruction[0])
+            for i in range(1, n_knots):
+                rope[i].follow(rope[i - 1])
+    plot_grid(rope)
+    plot_travel(rope)
+    return len(rope[-1].visited_locations)
 
 
 def solve(puzzle_input):
