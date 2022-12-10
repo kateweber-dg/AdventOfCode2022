@@ -32,34 +32,29 @@ def test_move_head(example1):
     assert head.y == 2
 
 def test_follow_head():
-    head = aoc.Knot(0, 0)
-    tail = aoc.Knot(0, 0)
-    head.move('U')
-    tail.follow(head)
-    head.move('R')
-    tail.follow(head)
-    head.move('U')
-    tail.follow(head)
-    head.move('U')
-    tail.follow(head)
-    print(head, tail)
+
+    for dir in ['U', 'D', 'L', 'R']:
+        for pos in [(0, 1), (1, 1), (1, 0), (1, -1),
+                    (0, -1), (-1, -1), (-1, 0), (-1, 1)]:
+            head = aoc.Knot(0, 0)
+            tail = aoc.Knot(x=pos[0], y=pos[1])
+            head.move(dir)
+            tail.follow(head)
+            print(tail)
 
     return
-
-
-
 
 def test_part1_example1(example1):
     """Test part 1 on example input."""
     assert aoc.part1(example1) == 13
 
-
 def test_part2_example1(example1):
     """Test part 2 on example input."""
-    foo = aoc.part2(example1)
-    assert foo == 8
+    assert aoc.part2(example1)== 1
 
 def test_part2_example2(example2):
     """Test part 2 on example input."""
     assert aoc.part2(example2) == 36
+
+
 

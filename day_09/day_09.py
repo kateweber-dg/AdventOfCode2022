@@ -2,7 +2,7 @@ import pathlib
 import sys
 
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 def parse(puzzle_input):
     """Parse input."""
@@ -35,31 +35,35 @@ class Knot(object):
         # there has to be a generalisable rule here :|
         dx = head_point.x - self.x
         dy = head_point.y - self.y
-        if dx + dy >= 3:
-            self.move('R')
-            self.move('U')
-        elif (dx == 2 and dy == -1) or \
-                (dx == 1 and dy == -2):
-            self.move('R')
-            self.move('D')
-        elif (dx == -2 and dy == 1) or \
-                (dx == -1 and dy == 2):
-            self.move('L')
-            self.move('U')
-        elif dx + dy <= -3:
-            self.move('L')
-            self.move('D')
 
-        elif dx > 1:
-            self.move('R')
-        elif dx < -1:
-            self.move('L')
-        elif dy > 1:
-            self.move('U')
-        elif dy < -1:
-            self.move('D')
+        if dx == 0 or dy == 0:
+            if dx > 1 and dy == 0:
+                self.move('R')
+            elif dx < -1 and dy == 0:
+                self.move('L')
+            elif dy > 1 and dx == 0:
+                self.move('U')
+            elif dy < -1 and dx == 0:
+                self.move('D')
+
+        else:
+            slope = dy/dx
+            distance = np.sqrt(dy ** 2 + dx ** 2)
+            if distance > np.sqrt(2) and slope > 0 and dy > 0:
+                self.move('R')
+                self.move('U')
+            elif distance > np.sqrt(2) and slope < 0 and dy < 0:
+                self.move('R')
+                self.move('D')
+            elif distance > np.sqrt(2) and slope < 0 and dy > 0:
+                self.move('L')
+                self.move('U')
+            elif distance > np.sqrt(2) and slope > 0 and dy < 0:
+                self.move('L')
+                self.move('D')
 
         self.visited_locations.add((self.x, self.y))
+        return (dx, dy)
 
     def __repr__(self):
         return f'({self.x}, {self.y})'
@@ -67,15 +71,20 @@ class Knot(object):
 
 def part1(parsed_input):
     """Solve part 1."""
-    head = Knot()
-    tail = Knot()
+    n_knots = 2
 
+    rope = [Knot() for x in range(n_knots)]
+    deltas = []
     for instruction in parsed_input:
         for repeat in range(instruction[1]):
-            head.move(instruction[0])
-            tail.follow(head)
-
-    return len(tail.visited_locations)
+            rope[0].move(instruction[0])
+            for i in range(1, n_knots):
+                dx, dy = rope[i].follow(rope[i - 1])
+                deltas.append((dx, dy))
+    plot_grid(rope)
+    plot_travel(rope)
+    plot_deltas(deltas)
+    return len(rope[-1].visited_locations)
 
 
 def plot_grid(rope):
@@ -86,6 +95,7 @@ def plot_grid(rope):
     for i in range(len(x_coords)):
         plt.annotate(str(i), (x_coords[i], y_coords[i] + 0.2))
     plt.axis('equal')
+    plt.title('final positions')
     plt.show()
 
 def plot_travel(rope):
@@ -94,6 +104,15 @@ def plot_travel(rope):
     y_coords = [x[1] for x in travel_coords]
     plt.scatter(x_coords, y_coords)
     plt.axis('equal')
+    plt.title('travel')
+    plt.show()
+
+
+def plot_deltas(deltas):
+    x = [z[0] for z in deltas]
+    y = [z[1] for z in deltas]
+    plt.scatter(x, y, alpha = 0.1)
+    plt.title('deltas')
     plt.show()
 
 
@@ -102,14 +121,16 @@ def part2(parsed_input):
     n_knots = 10
 
     rope = [Knot() for x in range(n_knots)]
-
+    deltas = []
     for instruction in parsed_input:
         for repeat in range(instruction[1]):
             rope[0].move(instruction[0])
             for i in range(1, n_knots):
-                rope[i].follow(rope[i - 1])
+                dx, dy = rope[i].follow(rope[i - 1])
+                deltas.append((dx, dy))
     plot_grid(rope)
     plot_travel(rope)
+    plot_deltas(deltas)
     return len(rope[-1].visited_locations)
 
 
