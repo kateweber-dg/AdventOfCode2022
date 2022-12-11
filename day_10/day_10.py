@@ -96,8 +96,8 @@ def part2(parsed_input):
             crt[horiz_row, horiz_index] = '.'
         # print(''.join(crt[horiz_row]))
 
-    wrap_crt(crt)
-    return 'foo'
+
+    return wrap_crt(crt)
 
 
 
